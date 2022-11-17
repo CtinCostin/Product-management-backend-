@@ -31,12 +31,6 @@ public class Mapper {
         CategoryResponseDto categoryResponseDto = new CategoryResponseDto();
         categoryResponseDto.setId(category.getId());
         categoryResponseDto.setName(category.getName());
-        List<String> productsNames = new ArrayList<>();
-        List<Product> products = category.getProducts();
-        for (Product product : products) {
-            productsNames.add(product.getName());
-        }
-        categoryResponseDto.setProductsNames(productsNames);
 
         return categoryResponseDto;
     }

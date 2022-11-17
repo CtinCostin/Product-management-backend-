@@ -1,10 +1,13 @@
 package com.george.Productmanagementbackend.service;
 
+import com.george.Productmanagementbackend.dto.Mapper;
 import com.george.Productmanagementbackend.dto.requestDto.CategoryRequestDto;
+import com.george.Productmanagementbackend.dto.responseDto.CategoryResponseDto;
 import com.george.Productmanagementbackend.model.Category;
 import com.george.Productmanagementbackend.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,17 +19,18 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryRepository categoryRepository;
 
     @Override
-    public Category addCategory(CategoryRequestDto categoryRequestDto) {
+    public CategoryResponseDto addCategory(CategoryRequestDto categoryRequestDto) {
         Category category = new Category();
         category.setName(categoryRequestDto.getName());
-        return categoryRepository.save(category);
+        categoryRepository.save(category);
+        return Mapper.categoryToCategoryResponseDto(category);
     }
 
     @Override
-    public List<Category> getCategories() {
+    public List<CategoryResponseDto> getCategories() {
         List<Category> categories = new ArrayList<>();
         categoryRepository.findAll().forEach(categories::add);
-        return categories;
+        return Mapper.categoriesToCategoryResponseDtos(categories);
     }
 
     @Override
@@ -36,18 +40,24 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category updateCategory(Long id, CategoryRequestDto categoryRequestDto) {
+    public CategoryResponseDto getCategoryById(Long categoryId) {
+        Category category = getCategory(categoryId);
+        return Mapper.categoryToCategoryResponseDto(category);
+    }
+
+    @Transactional
+    @Override
+    public CategoryResponseDto updateCategory(Long id, CategoryRequestDto categoryRequestDto) {
         Category categoryToUpdate = getCategory(id);
         categoryToUpdate.setName(categoryRequestDto.getName());
-        categoryToUpdate.setProducts(categoryRequestDto.getProductsNames());
         categoryRepository.save(categoryToUpdate);
-        return categoryToUpdate;
+        return Mapper.categoryToCategoryResponseDto(categoryToUpdate);
     }
 
     @Override
-    public Category deleteCategory(Long id) {
+    public CategoryResponseDto deleteCategory(Long id) {
         Category category = getCategory(id);
         categoryRepository.delete(category);
-        return category;
+        return Mapper.categoryToCategoryResponseDto(category);
     }
 }
