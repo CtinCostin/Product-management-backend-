@@ -32,6 +32,8 @@ public class ProductServiceImpl implements ProductService {
         if (productRequestDto.getCategoryId() == null) {
             throw new IllegalArgumentException("product should have a category");
         }
+        product.setPrice(productRequestDto.getPrice());
+        product.setDescription(productRequestDto.getDescription());
         Category category = categoryService.getCategory(productRequestDto.getCategoryId());
         product.setCategory(category);
 
@@ -77,6 +79,8 @@ public class ProductServiceImpl implements ProductService {
             Category category = categoryService.getCategory(productRequestDto.getCategoryId());
             productToEdit.setCategory(category);
         }
+        productToEdit.setDescription(productRequestDto.getDescription());
+        productToEdit.setPrice(productRequestDto.getPrice());
         return Mapper.productToProductResponseDto(productToEdit);
     }
 

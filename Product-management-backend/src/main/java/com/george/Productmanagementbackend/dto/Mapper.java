@@ -15,6 +15,8 @@ public class Mapper {
         productResponseDto.setId(product.getId());
         productResponseDto.setCategoryName(product.getCategory().getName());
         productResponseDto.setName(product.getName());
+        productResponseDto.setPrice(product.getPrice());
+        productResponseDto.setDescription(product.getDescription());
 
         return productResponseDto;
     }
